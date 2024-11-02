@@ -16,14 +16,14 @@ class BookingsController extends Controller
     public function index()
     {
         $bookings = Bookings::latest()->paginate(5);
-    //render view with posts
+  
         return view('bookings.index', compact('bookings'));
     }
 
     public function create()
     {
-        $books = Book::all(); // Ambil semua data buku untuk dropdown
-        return view('bookings.create', compact('books')); // Kirim data buku ke view
+        $books = Book::all(); 
+        return view('bookings.create', compact('books')); 
     }
     /**
      * store
@@ -33,16 +33,16 @@ class BookingsController extends Controller
      */
     public function store(Request $request)
     {
-        // Validate form data
+        
         $request->validate([
-            'id_book' => 'required|exists:books,id', // Validate that the book exists
+            'id_book' => 'required|exists:books,id', 
             'class' => 'required|string|max:255',
             'price' => 'required',
         ]);
 
-        // Create a new booking
+      
         Bookings::create([
-            'id_book' => $request->id_book, // Store the selected book ID
+            'id_book' => $request->id_book, 
             'class' => $request->class,
             'price' => $request->price,
         ]);
@@ -55,8 +55,8 @@ class BookingsController extends Controller
      */
     public function edit($id)
     {
-        $booking = Bookings::findOrFail($id); // Cari booking berdasarkan ID
-        $books = Book::all(); // Ambil semua buku untuk dropdown
+        $booking = Bookings::findOrFail($id); 
+        $books = Book::all(); 
         return view('bookings.edit', compact('booking', 'books'));
     }
 
@@ -67,14 +67,14 @@ class BookingsController extends Controller
     {
         $booking = Bookings::findOrFail($id);
 
-        // Validasi data
+       
         $request->validate([
             'id_book' => 'required|exists:books,id',
             'class' => 'required|string|max:255',
             'price' => 'required|numeric',
         ]);
 
-        // Update booking
+       
         $booking->update([
             'id_book' => $request->id_book,
             'class' => $request->class,

@@ -40,26 +40,26 @@ class BookController extends Controller
     */
     public function store(Request $request)
     {
-        // Validasi Formulir
+       
         $request->validate([
             'title' => 'required',
             'author' => 'required',
             'pages' => 'required',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validasi gambar jika ada
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' 
         ]);
     
-        // Proses upload gambar
-        $imagePath = null; // Pastikan ini null secara default
+       
+        $imagePath = null; 
         if ($request->hasFile('image')) {
-            $imagePath = $request->file('image')->store('images', 'public'); // Simpan gambar ke public/images
+            $imagePath = $request->file('image')->store('images', 'public'); 
         }
     
-        // Simpan data ke dalam database
+      
         Book::create([
             'title' => $request->title,
             'author' => $request->author,
             'pages' => $request->pages,
-            'image' => $imagePath, // Menggunakan $imagePath yang bisa null
+            'image' => $imagePath, 
         ]);
     
         return redirect()->route('book.index')->with(['success' => 'Book Added Successfully!']);
@@ -76,7 +76,7 @@ class BookController extends Controller
  public function edit($id)
 {
     $book = Book::find($id);
-    // Check if the book exists
+
     if (!$book) {
         return redirect()->route('book.index')->with(['error' => 'Book not found!']);
     }
@@ -87,28 +87,28 @@ public function update(Request $request, $id)
 {
     $book = Book::find($id);
     
-    // Validate form
+
     $request->validate([
         'title' => 'required',
         'author' => 'required',
         'pages' => 'required',
-        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate image if provided
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' 
     ]);
     
-    // Check if a new image is uploaded
-    $imagePath = $book->image; // Keep the old image path by default
+   
+    $imagePath = $book->image; 
     if ($request->hasFile('image')) {
-        // If there's a new image, store it and update the image path
+        
         $image = $request->file('image');
-        $imagePath = $image->store('images', 'public'); // Save to 'storage/app/public/book_images'
+        $imagePath = $image->store('images', 'public'); 
     }
 
-    // Update the book data
+ 
     $book->update([
         'title' => $request->title,
         'author' => $request->author,
         'pages' => $request->pages,
-        'image' => $imagePath, // Save new image path if uploaded, or keep old
+        'image' => $imagePath,
     ]);
 
     return redirect()->route('book.index')->with(['success' => 'Data Berhasil Diubah!']);

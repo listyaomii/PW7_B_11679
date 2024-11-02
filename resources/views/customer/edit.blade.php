@@ -30,7 +30,7 @@
                     <div class="card-body">
                         <form action="{{ route('customer.update', $customer->id) }}" method="POST" enctype="multipart/form-data">
                             @csrf
-                            @method('PUT') <!-- This is necessary for the update method -->
+                            @method('PUT') 
 
                             <div class="row">
                                 <!-- Nama -->

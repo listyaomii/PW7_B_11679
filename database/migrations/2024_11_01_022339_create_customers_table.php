@@ -20,7 +20,7 @@ return new class extends Migration
             $table->bigInteger('id_bookings')->unsigned();
             $table->timestamps();
 
-            // Jika ada relasi foreign key ke tabel bookings, tambahkan constraint ini:
+            
             $table->foreign('id_bookings')->references('id')->on('bookings')->onDelete('cascade');
         });
     }

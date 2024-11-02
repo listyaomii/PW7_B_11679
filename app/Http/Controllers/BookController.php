@@ -40,61 +40,80 @@ class BookController extends Controller
     */
     public function store(Request $request)
     {
-    //Validasi Formulir
-    $this->validate($request, [
-        'title' => 'required',
-        'author' => 'required',
-        'pages' => 'required'
-    ]);
-    //Fungsi Simpan Data ke dalam Database
-    Book::create([
-        'title' => $request->title,
-        'author' => $request->author,
-        'pages' => $request->pages
-    ]);
-    try {
-        return redirect()->route('book.index');
-        } catch (Exception $e) {
-            return redirect()->route('book.index');
-        }
-    }
-
-    /**
-    * edit
-    *
-    * @param int $id
-    * @return void
-    */
-    public function edit($id)
-    {
-        $book = Book::find($id);
-        return view('book.edit', compact('book'));
-    }
-
-    /**
-    * update
-    *
-    * @param mixed $request
-    * @param int $id
-    * @return void
-    */
-    public function update(Request $request, $id)
-    {
-        $book = Book::find($id);
-        //validate form
-        $this->validate($request, [
+        // Validasi Formulir
+        $request->validate([
             'title' => 'required',
             'author' => 'required',
-            'pages' => 'required'
+            'pages' => 'required',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validasi gambar jika ada
         ]);
-        $book->update([
+    
+        // Proses upload gambar
+        $imagePath = null; // Pastikan ini null secara default
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('images', 'public'); // Simpan gambar ke public/images
+        }
+    
+        // Simpan data ke dalam database
+        Book::create([
             'title' => $request->title,
             'author' => $request->author,
-            'pages' => $request->pages
+            'pages' => $request->pages,
+            'image' => $imagePath, // Menggunakan $imagePath yang bisa null
         ]);
-        return redirect()->route('book.index')->with(['success' => 'Data
-        Berhasil Diubah!']);
+    
+        return redirect()->route('book.index')->with(['success' => 'Book Added Successfully!']);
     }
+    
+
+/**
+ * update
+ *
+ * @param Request $request
+ * @param int $id
+ * @return void
+ */
+ public function edit($id)
+{
+    $book = Book::find($id);
+    // Check if the book exists
+    if (!$book) {
+        return redirect()->route('book.index')->with(['error' => 'Book not found!']);
+    }
+    return view('book.edit', compact('book'));
+}
+
+public function update(Request $request, $id)
+{
+    $book = Book::find($id);
+    
+    // Validate form
+    $request->validate([
+        'title' => 'required',
+        'author' => 'required',
+        'pages' => 'required',
+        'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048' // Validate image if provided
+    ]);
+    
+    // Check if a new image is uploaded
+    $imagePath = $book->image; // Keep the old image path by default
+    if ($request->hasFile('image')) {
+        // If there's a new image, store it and update the image path
+        $image = $request->file('image');
+        $imagePath = $image->store('images', 'public'); // Save to 'storage/app/public/book_images'
+    }
+
+    // Update the book data
+    $book->update([
+        'title' => $request->title,
+        'author' => $request->author,
+        'pages' => $request->pages,
+        'image' => $imagePath, // Save new image path if uploaded, or keep old
+    ]);
+
+    return redirect()->route('book.index')->with(['success' => 'Data Berhasil Diubah!']);
+}
+
     /**
     * destroy
     *
@@ -109,6 +128,6 @@ class BookController extends Controller
         Berhasil Dihapus!']);
     }
         
-
+    
 
 }

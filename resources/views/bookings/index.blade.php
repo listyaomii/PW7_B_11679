@@ -29,21 +29,40 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
+                    <a href="{{ route('bookings.create') }}" class="btn btn-md btn-success mb-3">Tambah Booking</a>
                         <div class="table-responsive p-0">
                             <table class="table table-hover text-no-wrap">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">Poster</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Class</th>
                                         <th class="text-center">Price</th>
+                                        <th class="text-center">Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     @forelse ($bookings as $item)
                                     <tr>
+                                    <td class="text-center">
+                                    @if ($item->book && $item->book->image)
+                                            <img src="{{ asset('storage/' . $item->book->image) }}" alt="{{ $item->book->title }}" style="width: 100px; height: auto;">
+                                        @else
+                                        <img src="{{ asset('storage/' . $item->book->image) }}" alt="{{ $item->book->title }}" style="width: 100px; height: auto;">
+                                        @endif
+                                        </td>
                                         <td class="text-center">{{$item->book->title}}</td>
                                             <td class="text-center">{{$item->class }}</td>
                                             <td class="text-center">{{$item->price }}</td>
+                                            <td class="text-center">
+                                            <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('bookings.destroy', $item->id) }}" method="POST">
+                                                <a href="{{ route('bookings.edit', $item->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                                <input type="hidden" name="debug_id" value="{{ $item->id }}">
+                                            </form>
+                                        </td>
                                     </tr>
                                     @empty
                                     <div class="alert alert-danger">

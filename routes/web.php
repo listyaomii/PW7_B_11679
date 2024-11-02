@@ -1,6 +1,7 @@
 <?php
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\BookingsController;
+use App\Http\Controllers\CustomerController;
 use Illuminate\Support\Facades\Route;
 /*
 |--------------------------------------------------------------------------
@@ -17,3 +18,5 @@ return view('dashboard');
 });
 Route::resource('/book', BookController::class);
 Route::resource('/bookings', BookingsController::class);
+Route::resource('customer', CustomerController::class);
+// Route::delete('/bookings/{id}', [BookingsController::class, 'destroy'])->name('bookings.destroy');

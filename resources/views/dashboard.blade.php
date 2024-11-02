@@ -21,6 +21,7 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet"
     href="https://cdn.jsdelivr.net/npm/bootstrapicons@1.18.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 
 <body class="hold-transition sidebar-mini">
@@ -75,6 +76,15 @@
                         <p> Bookings</p>
                     </a>
                 </li>
+
+                <li class="nav-item">
+                    <a href="{{ url('customer') }}"
+                        class="nav-link">
+                        <i class="fa-solid fa-person"></i>
+                        <p> Customer</p>
+                    </a>
+                </li>
+
             </ul>
         </nav>
     <!-- /.sidebar-menu -->

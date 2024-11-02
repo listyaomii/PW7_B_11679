@@ -3,24 +3,24 @@
 <div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1 class="m-0">BOOKS</h1>
-                </div>
-                <!-- /.col -->
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item">
-                            <a href="#">BOOKS</a>
-                        </li>
-                        <li class="breadcrumb-item active">Index</li>
-                    </ol>
-                </div>
-                <!-- /.col -->
-                </div>
-            <!-- /.row -->
+            <div class="col-sm-6">
+                <h1 class="m-0">BOOKS</h1>
+            </div>
+            <!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item">
+                        <a href="#">BOOKS</a>
+                    </li>
+                    <li class="breadcrumb-item active">Index</li>
+                </ol>
+            </div>
+            <!-- /.col -->
         </div>
-        <!-- /.container-fluid -->
+        <!-- /.row -->
     </div>
+    <!-- /.container-fluid -->
+</div>
 
 <!-- /.content-header -->
 <!-- Main content -->
@@ -30,11 +30,12 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <a href="{{ route('book.create') }}" class="btn btnmd btn-success mb-3">Tambah Buku</a>
+                        <a href="{{ route('book.create') }}" class="btn btn-md btn-success mb-3">Tambah Buku</a>
                         <div class="table-responsive p-0">
-                            <table class="table table-hover textnowrap">
+                            <table class="table table-hover text-nowrap">
                                 <thead>
                                     <tr>
+                                        <th class="text-center">Poster</th>
                                         <th class="text-center">Title</th>
                                         <th class="text-center">Author</th>
                                         <th class="text-center">Page</th>
@@ -44,38 +45,47 @@
                                 <tbody>
                                     @forelse ($book as $item)
                                     <tr>
-                                        <td class="text-center">{{ $item->title
-                                        }}</td>
-                                        <td class="text-center">{{ $item->author
-                                        }}</td>
-                                        <td class="text-center">{{ $item->pages}}</td>
                                         <td class="text-center">
-                                        <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('book.destroy', $item->id)}}" method="POST">
-                                            <a href="{{route('book.edit', $item->id)}}" class="btn btn-sm btn-primary">EDIT</a>
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit"class="btn btn-sm btn-danger">Hapus</button>
-                                        </form>
+                                            @if ($item->image)
+                                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" style="width: 100px; height: auto;">
+                                            @else
+                                            <img src="{{ asset('storage/' . $item->image) }}" alt="{{ $item->title }}" style="width: 100px; height: auto;">
+                                            @endif
+                                        </td>
+                                        <td class="text-center">{{ $item->title }}</td>
+                                        <td class="text-center">{{ $item->author }}</td>
+                                        <td class="text-center">{{ $item->pages }}</td>
+                                        <td class="text-center">
+                                            <form onsubmit="return confirm('Apakah Anda Yakin ?');" action="{{ route('book.destroy', $item->id) }}" method="POST">
+                                                <a href="{{ route('book.edit', $item->id) }}" class="btn btn-sm btn-primary">EDIT</a>
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-danger">Hapus</button>
+                                            </form>
                                         </td>
                                     </tr>
                                     @empty
-                                    <div class="alert alert-danger">
-                                    Data Buku belum tersedia
-                                    </div>
+                                    <tr>
+                                        <td colspan="5" class="text-center">
+                                            <div class="alert alert-danger">
+                                                Data Buku belum tersedia
+                                            </div>
+                                        </td>
+                                    </tr>
                                     @endforelse
                                 </tbody>
-                        </table>
+                            </table>
+                        </div>
+                        {{ $book->links() }}
                     </div>
-                    {{ $book->links() }}
-                    </div>
-                <!-- /.card-body -->
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
             </div>
-            <!-- /.card -->
-        </div>
             <!-- /.col-md-6 -->
+        </div>
+        <!-- /.row -->
     </div>
-    <!-- /.row -->
-</div>
-<!-- /.container-fluid -->
+    <!-- /.container-fluid -->
 </div>
 @endsection
